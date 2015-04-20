@@ -23,23 +23,29 @@ public class Movie {
     }
 
 
-    public double getCharge(int days) {
+    public double getCharge(int rentedDays) {
         double ret = 0;
         switch (getPriceCode()) {
             case Movie.REGULAR:
                 ret += 2;
-                if (days > 2)
-                    ret += (days - 2) * 1.5;
+                if (rentedDays > 2)
+                    ret += (rentedDays - 2) * 1.5;
                 break;
             case Movie.NEW_RELEASE:
-                ret += days * 3;
+                ret += rentedDays * 3;
                 break;
             case Movie.CHILDRENS:
                 ret += 1.5;
-                if (days > 3)
-                    ret += (days - 3) * 1.5;
+                if (rentedDays > 3)
+                    ret += (rentedDays - 3) * 1.5;
                 break;
         }
         return ret;
+    }
+
+    public int getFrequentRenterPoints(int daysRented) {
+        if ((getPriceCode() == Movie.NEW_RELEASE) && daysRented > 1)
+            return 2;
+        return 1;
     }
 }
