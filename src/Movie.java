@@ -1,21 +1,38 @@
 public class Movie {
-    public static final int CHILDRENS = 2;
-    public static final int REGULAR = 0;
+    public static final int KIDS = 2;
+    public static final int NORMAL = 0;
     public static final int NEW_RELEASE = 1;
     private String title;
     private int priceCode;
+    private Price price;
 
-    public Movie(String newtitle, int newpriceCode) {
+    public Movie(String newtitle, int priceCode) {
+        setTitle(newtitle);
+        setPriceCode(priceCode);
+    }
+
+    public setTitle(String newtitle){
         title = newtitle;
-        priceCode = newpriceCode;
     }
 
     public int getPriceCode() {
-        return priceCode;
+        return price.getPriceCode();
     }
 
     public void setPriceCode(int arg) {
-        priceCode = arg;
+        switch (arg) {
+            case NORMAL:
+                price = new NormalPrice();
+                break;
+            case KIDS:
+                price = new KidsPrice();
+                break;
+            case NEW_RELEASE:
+                price = new NewReleasePrice();
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid Price Code");
+        }
     }
 
     public String getTitle() {
@@ -24,28 +41,10 @@ public class Movie {
 
 
     public double getCharge(int rentedDays) {
-        double ret = 0;
-        switch (getPriceCode()) {
-            case Movie.REGULAR:
-                ret += 2;
-                if (rentedDays > 2)
-                    ret += (rentedDays - 2) * 1.5;
-                break;
-            case Movie.NEW_RELEASE:
-                ret += rentedDays * 3;
-                break;
-            case Movie.CHILDRENS:
-                ret += 1.5;
-                if (rentedDays > 3)
-                    ret += (rentedDays - 3) * 1.5;
-                break;
-        }
-        return ret;
+        return price.getCharge(rentedDays);
     }
 
-    public int getFrequentRenterPoints(int daysRented) {
-        if ((getPriceCode() == Movie.NEW_RELEASE) && daysRented > 1)
-            return 2;
-        return 1;
+    public int getFrequentRenterPoints(int rentedDays) {
+        return price.getFrequentRenterPoints(rentedDays);
     }
 }
